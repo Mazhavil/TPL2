@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,20 +8,27 @@
 <body>
     <div>
         <h3>Список</h3>
-        <table>
-            <tr>
-                <td><p>Наименование</p></td>
-                <td><p>Цена</p></td>
-                <td></td>
-            </tr>
-            {% for p in products %}
+        <form method="post">{% csrf_token %}
+            <table>
+                <tr>
+                    <td><p>Наименование</p></td>
+                    <td><p>Цена</p></td>
+                    <td></td>
+                </tr>
+                {% for p in products %}
                 <tr>
                     <td><p>{{ p.name }}</p></td>
                     <td><p>{{ p.price }}</p></td>
-                    <td><p><a href="/buy/{{ p.id }}">Купить</a></p></td>
+                    {% if p.buying %}
+                    <td><p><input type="checkbox" name="buyCheckbox" checked="checked" value="{{ p.id }}">Выбрать</input></p></td>
+                    {% else %}
+                    <td><p><input type="checkbox" name="buyCheckbox" value="{{ p.id }}">Выбрать</input></p></td>
+                    {% endif %}
                 </tr>
-            {% endfor %}
-        </table>
+                {% endfor %}
+            </table>
+            <input type="submit" value="Купить выбранный(-e) предмет(-ы)" />
+        </form>
     </div>
 </body>
 </html>

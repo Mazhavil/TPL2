@@ -5,7 +5,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -18,6 +17,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=200)),
                 ('price', models.PositiveIntegerField()),
+                ('buying', models.BooleanField(default=False)),
             ],
         ),
         migrations.CreateModel(
@@ -28,6 +28,7 @@ class Migration(migrations.Migration):
                 ('address', models.CharField(max_length=200)),
                 ('date', models.DateTimeField(auto_now_add=True)),
                 ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='shop.product')),
+                ('discount', models.FloatField()),
             ],
         ),
     ]

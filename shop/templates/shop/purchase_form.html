@@ -6,9 +6,16 @@
 </head>
 <body>
     <div>
-        <h3>Покупка</h3>
+        <h3>Предметы выбранные для покупки:</h3>
+        {% for p_p in purchase_products %}
+            <tr>
+                <td><p>{{ p_p.name }}</p></td>
+            </tr>
+        {% endfor %}
         <form method="post">{% csrf_token %}
-            <input type="hidden" value="{{ view.kwargs.product_id }}" name="product" />
+            {% for p_p in purchase_products %}
+                <input type="hidden" value="{{ p_p.id }}" name="product" />
+            {% endfor %}
             <table>
                 <tr>
                     <td><p>Введите свое имя </p></td>
