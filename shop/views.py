@@ -46,8 +46,9 @@ def purchase(request):
                 saved_form = form.save()
                 show_response = True
         if show_response:
+            Product.objects.filter(buying=True).update(buying=False)
             return HttpResponse(f'Спасибо за покупку, {saved_form.person}!'
-                                    f'\n Скидка за одновременную покупку экземпляров товаров разного вида: {discount}%'
+                                    f'\n Скидка за одновременную покупку экземпляров товаров разного вида: {discount * 100}%'
                                     f'\n Общая сумма покупки: {int(price * (1 - (discount)))}')
     purchase_products = Product.objects.filter(buying=True)
     form = PurchaseForm()

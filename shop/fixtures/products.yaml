@@ -1,15 +1,30 @@
 - model: shop.product
   pk: 1
   fields:
-    name: Стол
-    price: 2000
+    name: Толстовка
+    price: 4000
 - model: shop.product
   pk: 2
   fields:
-    name: Стул
-    price: 1000
+    name: Шапка
+    price: 380
 - model: shop.product
   pk: 3
   fields:
-    name: Табурет
-    price: 500
+    name: Водолазка
+    price: 1200
+- model: shop.product
+  pk: 4
+  fields:
+    name: Футболка
+    price: 720
+- model: shop.product
+  pk: 5
+  fields:
+    name: Кепка
+    price: 450
+- model: shop.product
+  pk: 6
+  fields:
+    name: Свитшот
+    price: 2500
