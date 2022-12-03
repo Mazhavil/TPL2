@@ -29,27 +29,18 @@ def purchase(request):
     if request.method == 'POST':
         show_response = False
         original = request.POST.copy()
-        for product in original.getlist('product'):
-            post = original
-            post['product'] = product
-            print(Product.objects.get(id=product).price)
-            price += Product.objects.get(id=product).price
-            if len(Product.objects.filter(buying=True)) > 1:
-                post['discount'] = 0.1
-                discount = 0.1
-            else:
-                post['discount'] = 0
-                discount = 0
-            request.POST = post
-            form = PurchaseForm(request.POST)
-            if form.is_valid():
-                saved_form = form.save()
+        print("Testssss ", Product.objects.filter(buying=True))
+        cortege = calculate_general_price_and_discount(Product.objects.filter(buying=True), original, request.POST)
+        if len(cortege[0]) > 0:
+            for element in cortege[0]:
+                saved_form = element.save()
                 show_response = True
+        print("cortege result: ", cortege)
         if show_response:
             Product.objects.filter(buying=True).update(buying=False)
             return HttpResponse(f'Спасибо за покупку, {saved_form.person}!'
-                                    f'\n Скидка за одновременную покупку экземпляров товаров разного вида: {discount * 100}%'
-                                    f'\n Общая сумма покупки: {int(price * (1 - (discount)))}')
+                                    f'\n Скидка за одновременную покупку экземпляров товаров разного вида: {cortege[2]}%'
+                                    f'\n Общая сумма покупки: {cortege[1]}')
     purchase_products = Product.objects.filter(buying=True)
     form = PurchaseForm()
     context = {
@@ -57,3 +48,26 @@ def purchase(request):
         'purchase_products': purchase_products,
     }
     return render(request, 'shop/purchase_form.html', context)
+
+def calculate_general_price_and_discount(products_list, post, request):
+    finalForm = []
+    price = 0
+    discount = 0
+    for product in products_list:
+        if post is not None:
+            post['product'] = product
+        price += product.price
+        discount = calculate_discount(products_list)
+        if post is not None:
+            post['discount'] = discount
+            request.POST = post
+            form = PurchaseForm(request.POST)
+            if form.is_valid():
+                finalForm.append(form)
+    return finalForm, int(price * (1 - discount)), discount * 100
+
+def calculate_discount(Products):
+    resultValue = 0
+    if len(Products) > 1:
+        resultValue = 0.1
+    return resultValue
